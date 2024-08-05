@@ -94,14 +94,8 @@
 </head>
 <body>
     <div class="container">
-        <div class="slideshow">
-            <img src="foto1.jpg" alt="Foto 1">
-            <img src="foto2.jpg" alt="Foto 2">
-            <img src="foto3.jpg" alt="Foto 3">
-            <img src="foto4.jpg" alt="Foto 4">
-            <img src="foto5.jpg" alt="Foto 5">
-            <!-- Adicione mais imagens conforme necessário -->
-            <div class="hearts"></div>
+        <div class="slideshow" id="slideshow">
+            <!-- As imagens serão adicionadas dinamicamente -->
         </div>
         <div class="title">Juntos</div>
         <div class="counter" id="counter">Carregando...</div>
@@ -117,79 +111,93 @@
         </audio>
     </div>
     <script>
-        const images = document.querySelectorAll('.slideshow img');
-        let currentIndex = 0;
+        document.addEventListener('DOMContentLoaded', function () {
+            const slideshowElement = document.getElementById('slideshow');
+            const images = [];
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            for (let i = 1; i <= 33; i++) {
+                images.push(`foto${i}.jpg`);
             }
-        }
 
-        shuffle(Array.from(images)).forEach((img, index) => {
-            document.querySelector('.slideshow').appendChild(img);
-            if (index === 0) img.classList.add('active');
-        });
-
-        function showNextImage() {
-            images[currentIndex].classList.remove('active');
-            currentIndex = (currentIndex + 1) % images.length;
-            images[currentIndex].classList.add('active');
-        }
-
-        setInterval(showNextImage, 3000);
-
-        const startDate = new Date('2024-03-05T00:00:00');
-        const counterElement = document.getElementById('counter');
-
-        function updateCounter() {
-            const now = new Date();
-            const diff = now - startDate;
-
-            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30));
-            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            counterElement.textContent = `${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
-        }
-
-        setInterval(updateCounter, 1000);
-        updateCounter();
-
-        const heartsContainer = document.querySelector('.hearts');
-
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.textContent = '💘';
-            heart.style.left = `${Math.random() * 100}%`;
-            heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
-            heartsContainer.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
-        }
-
-        setInterval(createHeart, 300);
-
-        const audio = document.getElementById('background-music');
-        const playButton = document.getElementById('play-button');
-
-        playButton.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play().catch(error => {
-                    console.log('Playback error:', error);
-                });
-                playButton.textContent = '⏸️';
-            } else {
-                audio.pause();
-                playButton.textContent = '▶️';
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
             }
+
+            shuffle(images);
+
+            images.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                if (index === 0) img.classList.add('active');
+                slideshowElement.appendChild(img);
+            });
+
+            let currentIndex = 0;
+
+            function showNextImage() {
+                const currentImage = slideshowElement.children[currentIndex];
+                currentImage.classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                const nextImage = slideshowElement.children[currentIndex];
+                nextImage.classList.add('active');
+            }
+
+            setInterval(showNextImage, 3000);
+
+            const startDate = new Date('2024-03-05T00:00:00');
+            const counterElement = document.getElementById('counter');
+
+            function updateCounter() {
+                const now = new Date();
+                const diff = now - startDate;
+
+                const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+                const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30));
+                const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                counterElement.textContent = `${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+            }
+
+            setInterval(updateCounter, 1000);
+            updateCounter();
+
+            const heartsContainer = document.querySelector('.hearts');
+
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = '💘';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+                heartsContainer.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }
+
+            setInterval(createHeart, 300);
+
+            const audio = document.getElementById('background-music');
+            const playButton = document.getElementById('play-button');
+
+            playButton.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play().catch(error => {
+                        console.log('Playback error:', error);
+                    });
+                    playButton.textContent = '⏸️';
+                } else {
+                    audio.pause();
+                    playButton.textContent = '▶️';
+                }
+            });
         });
     </script>
 </body>
