@@ -1,140 +1,147 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Você é o amor da minha vida</title>
+    <title>Você é o Amor da Minha Vida</title>
     <style>
         body {
             background-color: black;
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
-        }
-        #photos {
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
             overflow: hidden;
-            border: 2px solid white;
+        }
+        .container {
             position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .photo {
+        .slideshow {
+            position: relative;
+            width: 60vw;
+            height: 60vh;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .slideshow img {
             width: 100%;
-            display: none;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s;
         }
-        .photo img {
-            width: 100%;
-        }
-        .active {
-            display: block;
+        .slideshow img.active {
+            opacity: 1;
         }
         .hearts {
-            position: fixed;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            overflow: hidden;
         }
         .heart {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            opacity: 0.8;
-            transform: rotate(-45deg);
+            width: 30px;
+            height: 30px;
+            background: red;
+            clip-path: polygon(50% 0%, 61% 21%, 84% 21%, 68% 36%, 79% 62%, 50% 48%, 21% 62%, 32% 36%, 16% 21%, 39% 21%);
+            animation: float 5s infinite;
         }
-        .heart:before, .heart:after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: red;
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
         }
-        .heart:before {
-            top: -10px;
-            left: 0;
-            border-radius: 50%;
+        .counter {
+            font-size: 2em;
+            margin-bottom: 20px;
         }
-        .heart:after {
-            left: 10px;
-            top: 0;
-            border-radius: 50%;
+        .text {
+            font-size: 1.5em;
+            max-width: 80%;
         }
     </style>
 </head>
 <body>
-    <div id="photos">
-        <div class="photo active">
-            <img src="foto1.jpg" alt="Foto 1">
-        </div>
-        <div class="photo">
+    <div class="container">
+        <div class="slideshow">
+            <img src="foto1.jpg" alt="Foto 1" class="active">
             <img src="foto2.jpg" alt="Foto 2">
-        </div>
-        <div class="photo">
             <img src="foto3.jpg" alt="Foto 3">
-        </div>
-        <div class="photo">
             <img src="foto4.jpg" alt="Foto 4">
-        </div>
-        <div class="photo">
             <img src="foto5.jpg" alt="Foto 5">
+            <div class="hearts"></div>
         </div>
+        <div class="counter" id="counter">Carregando...</div>
+        <div class="text">Oii amor, passando pra falar que te amo uma galáxia! Jesus não poderia ter me presenteado com um marido melhor, amo passar meus dias com você. Que daqui 20, 30 anos possamos voltar aqui e nosso tempo juntos continue sendo contado! Te amo demais ❤️</div>
+        <audio id="background-music" loop>
+            <source src="um_amor_puro.mp3" type="audio/mpeg">
+        </audio>
     </div>
-    <div id="timer"></div>
-    <p>Oii amor, passando pra falar que te amo uma galáxia!</p>
-    <p>Jesus não poderia ter me presenteado com um marido melhor, amo passar meus dias com você. Que daqui 20, 30 anos possamos voltar aqui e nosso tempo juntos continue sendo contado!</p>
-    <p>Te amo demais ❤️</p>
-    <div class="hearts"></div>
-    <audio autoplay loop>
-        <source src="um_amor_puro.mp3" type="audio/mp3">
-    </audio>
     <script>
-        const startDate = new Date('March 5, 2024 00:00:00').getTime();
+        const images = document.querySelectorAll('.slideshow img');
+        let currentIndex = 0;
 
-        function updateTimer() {
-            const now = new Date().getTime();
-            const distance = now - startDate;
-
-            const years = Math.floor(distance / (1000 * 60 * 60 * 24 * 365));
-            const months = Math.floor((distance % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
-            const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('timer').innerHTML =
-                `${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
-
-            setTimeout(updateTimer, 1000);
+        function showNextImage() {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add('active');
         }
 
-        updateTimer();
+        setInterval(showNextImage, 3000);
 
-        let currentPhoto = 0;
-        const photos = document.querySelectorAll('.photo');
+        const startDate = new Date('2024-03-05T00:00:00');
+        const counterElement = document.getElementById('counter');
 
-        function changePhoto() {
-            photos[currentPhoto].classList.remove('active');
-            currentPhoto = (currentPhoto + 1) % photos.length;
-            photos[currentPhoto].classList.add('active');
-            setTimeout(changePhoto, 3000);
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            counterElement.textContent = `${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
         }
 
-        changePhoto();
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        const heartsContainer = document.querySelector('.hearts');
 
         function createHeart() {
             const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
-            document.querySelector('.hearts').appendChild(heart);
+            heart.classList.add('heart');
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+            heartsContainer.appendChild(heart);
+
             setTimeout(() => {
                 heart.remove();
             }, 5000);
         }
 
         setInterval(createHeart, 300);
+
+        const audio = document.getElementById('background-music');
+        audio.play();
     </script>
 </body>
 </html>
