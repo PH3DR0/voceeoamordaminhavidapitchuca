@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Você é o amor da minha vida</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #photos {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 2px solid white;
+            position: relative;
+        }
+        .photo {
+            width: 100%;
+            display: none;
+        }
+        .photo img {
+            width: 100%;
+        }
+        .active {
+            display: block;
+        }
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            opacity: 0.8;
+            transform: rotate(-45deg);
+        }
+        .heart:before, .heart:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+        }
+        .heart:before {
+            top: -10px;
+            left: 0;
+            border-radius: 50%;
+        }
+        .heart:after {
+            left: 10px;
+            top: 0;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="photos">
+        <div class="photo active">
+            <img src="foto1.jpg" alt="Foto 1">
+        </div>
+        <div class="photo">
+            <img src="foto2.jpg" alt="Foto 2">
+        </div>
+        <div class="photo">
+            <img src="foto3.jpg" alt="Foto 3">
+        </div>
+        <div class="photo">
+            <img src="foto4.jpg" alt="Foto 4">
+        </div>
+        <div class="photo">
+            <img src="foto5.jpg" alt="Foto 5">
+        </div>
+    </div>
+    <div id="timer"></div>
+    <p>Oii amor, passando pra falar que te amo uma galáxia!</p>
+    <p>Jesus não poderia ter me presenteado com um marido melhor, amo passar meus dias com você. Que daqui 20, 30 anos possamos voltar aqui e nosso tempo juntos continue sendo contado!</p>
+    <p>Te amo demais ❤️</p>
+    <div class="hearts"></div>
+    <audio autoplay loop>
+        <source src="um_amor_puro.mp3" type="audio/mp3">
+    </audio>
+    <script>
+        const startDate = new Date('March 5, 2024 00:00:00').getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = now - startDate;
+
+            const years = Math.floor(distance / (1000 * 60 * 60 * 24 * 365));
+            const months = Math.floor((distance % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+            const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerHTML =
+                `${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+
+            setTimeout(updateTimer, 1000);
+        }
+
+        updateTimer();
+
+        let currentPhoto = 0;
+        const photos = document.querySelectorAll('.photo');
+
+        function changePhoto() {
+            photos[currentPhoto].classList.remove('active');
+            currentPhoto = (currentPhoto + 1) % photos.length;
+            photos[currentPhoto].classList.add('active');
+            setTimeout(changePhoto, 3000);
+        }
+
+        changePhoto();
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.querySelector('.hearts').appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+    </script>
+</body>
+</html>
