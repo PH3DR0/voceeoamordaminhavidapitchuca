@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,11 +90,6 @@
             cursor: pointer;
             margin-right: 10px;
         }
-        /* Adicione uma altura fixa à div de conteúdo */
-        .content {
-            height: 80vh; /* Ajuste conforme necessário */
-            overflow-y: scroll; /* Adiciona a barra de rolagem vertical */
-        }
     </style>
 </head>
 <body>
@@ -115,4 +110,74 @@
             <span class="play-button" id="play-button">▶️</span>
             <span>Nosso amor puro</span>
         </div>
-        <div class="text">Meu amor, cada segundo ao seu lado é um motivo de festa para minha alma, estar com você não significa apenas ter um lar, significa poder sorrir a todo momento, poder ser quem eu sou sem qualquer tipo de julgamento, você me mostra como o amor pode ser maravilhoso, e mesmo nas brigas ou desentendimentos, seguimos firmes e fortes, porque Sarah, nós temos um proposito juntos, temos o mesmo objetivo e eu amo muito isso. Eu amo o jeito que você ri, amo as fotinhas que você fica a cara do Miguelzinho (Mesmo você odiando ficar "zoada" em uma foto, amo o jeito que é batalhadora
+        <div class="text">Meu amor, cada segundo ao seu lado é um motivo de festa para minha alma, estar com você não significa apenas ter um lar, significa poder sorrir a todo momento, poder ser quem eu sou sem qualquer tipo de julgamento, você me mostra como o amor pode ser maravilhoso, e mesmo nas brigas ou desentendimentos, seguimos firmes e fortes, porque Sarah, nós temos um proposito juntos, temos o mesmo objetivo e eu amo muito isso. Eu amo o jeito que você ri, amo as fotinhas que você fica a cara do Miguelzinho (Mesmo você odiando ficar "zoada" em uma foto, amo o jeito que é batalhadora e responsável, enfim, eu amo amar você e só tenho agradecer por ter sido luz na minha vida, eu te ti amo!❤️</div>
+        <audio id="background-music" loop>
+            <source src="um_amor_puro.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    <script>
+        const images = document.querySelectorAll('.slideshow img');
+        let currentIndex = 0;
+
+        function showNextImage() {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add('active');
+        }
+
+        setInterval(showNextImage, 3000);
+
+        const startDate = new Date('2024-03-05T00:00:00');
+        const counterElement = document.getElementById('counter');
+
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            counterElement.textContent = `${years} anos, ${months} meses, ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+        }
+
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        const heartsContainer = document.querySelector('.hearts');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.textContent = '💘';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        const audio = document.getElementById('background-music');
+        const playButton = document.getElementById('play-button');
+
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().catch(error => {
+                    console.log('Playback error:', error);
+                });
+                playButton.textContent = '⏸️';
+            } else {
+                audio.pause();
+                playButton.textContent = '▶️';
+            }
+        });
+    </script>
+</body>
+</html>
