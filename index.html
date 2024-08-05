@@ -22,7 +22,7 @@
         }
         .slideshow {
             position: relative;
-            width: 60vw;
+            width: 30vw;
             height: 60vh;
             overflow: hidden;
             margin-bottom: 20px;
@@ -50,10 +50,8 @@
         }
         .heart {
             position: absolute;
-            width: 30px;
-            height: 30px;
-            background: red;
-            clip-path: polygon(50% 0%, 61% 21%, 84% 21%, 68% 36%, 79% 62%, 50% 48%, 21% 62%, 32% 36%, 16% 21%, 39% 21%);
+            font-size: 24px;
+            color: red;
             animation: float 5s infinite;
         }
         @keyframes float {
@@ -129,6 +127,7 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
+            heart.textContent = '❤️‍🔥';
             heart.style.left = `${Math.random() * 100}%`;
             heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
             heartsContainer.appendChild(heart);
@@ -141,7 +140,11 @@
         setInterval(createHeart, 300);
 
         const audio = document.getElementById('background-music');
-        audio.play();
+        audio.addEventListener('canplaythrough', () => {
+            audio.play().catch(error => {
+                console.log('Playback error:', error);
+            });
+        });
     </script>
 </body>
 </html>
