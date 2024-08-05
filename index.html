@@ -64,13 +64,31 @@
                 opacity: 0;
             }
         }
-        .counter {
+        .title {
             font-size: 2em;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+        .counter {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .heart-divider {
+            font-size: 2em;
+            margin: 10px 0;
         }
         .text {
-            font-size: 1.5em;
+            font-size: 1.2em;
             max-width: 80%;
+        }
+        .music-control {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .play-button {
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -84,7 +102,14 @@
             <img src="foto5.jpg" alt="Foto 5">
             <div class="hearts"></div>
         </div>
+        <div class="title">Juntos</div>
         <div class="counter" id="counter">Carregando...</div>
+        <div class="heart-divider">💘</div>
+        <hr style="width: 80%; margin: 10px auto; border: 1px solid white;">
+        <div class="music-control">
+            <span class="play-button" id="play-button">▶️</span>
+            <span>Nosso amor puro</span>
+        </div>
         <div class="text">Oii amor, passando pra falar que te amo uma galáxia! Jesus não poderia ter me presenteado com um marido melhor, amo passar meus dias com você. Que daqui 20, 30 anos possamos voltar aqui e nosso tempo juntos continue sendo contado! Te amo demais ❤️</div>
         <audio id="background-music" loop>
             <source src="um_amor_puro.mp3" type="audio/mpeg">
@@ -127,7 +152,7 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.textContent = '❤️‍🔥';
+            heart.textContent = '💘';
             heart.style.left = `${Math.random() * 100}%`;
             heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
             heartsContainer.appendChild(heart);
@@ -140,10 +165,18 @@
         setInterval(createHeart, 300);
 
         const audio = document.getElementById('background-music');
-        audio.addEventListener('canplaythrough', () => {
-            audio.play().catch(error => {
-                console.log('Playback error:', error);
-            });
+        const playButton = document.getElementById('play-button');
+
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().catch(error => {
+                    console.log('Playback error:', error);
+                });
+                playButton.textContent = '⏸️';
+            } else {
+                audio.pause();
+                playButton.textContent = '▶️';
+            }
         });
     </script>
 </body>
